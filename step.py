@@ -6,15 +6,24 @@ from cookware import Cookware
 
 replaceSpecialReg = re.compile(r"(([#@])(?:[^#@\n{}]+{\S*}|\w+))")
 stepOutReg = re.compile(r"(\$[CI])(\d+)")
+blockCommentReg = re.compile(r".*\[-(.*)-\]")
 
 class Step():
     def __init__(self) -> None:
         self.ingredients : List[Ingredient] = []
         self.cookware : List[Cookware] = []
         self.__text : str = ""
+        self.comment : str = ""
 
     def parse(text:str) -> 'Step':
         s = Step()
+        if "--" in text:
+            split = text.split("--")
+            text = split[0]
+            s.comment = "".join(split[1:])
+        m = blockCommentReg.match(text)
+        if bool(m):
+            s.comment = m.group(1)
         s.setText(text)
         return s
 
