@@ -40,7 +40,7 @@ class Step():
                 text = replaceSpecialReg.sub(r"$I{0}".format(len(self.ingredients)-1), text, 1)
         
         for match in timerReg.findall(text):
-            self.timers.append(Timer.parse(match[0])[0])
+            self.timers.append(Timer.parse(match)[0])
             text = timerReg.sub(r"$T{0}".format(len(self.timers)-1), text, 1)
 
         self.__text = text

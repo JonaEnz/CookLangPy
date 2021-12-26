@@ -64,7 +64,8 @@ def getUnitType(unit1: str, unit2: str) -> UnitTypes:
     else:
         return None
 
-def getUnitConversionFactor(unit: str, utype : UnitTypes) -> float:
+def getUnitConversionFactor(unit: str) -> float:
+    utype = getUnitType(unit, unit)
     if utype == UnitTypes.VOLUME:
         return VolumeUnits[unit.upper()]
     elif utype == UnitTypes.WEIGHT:
