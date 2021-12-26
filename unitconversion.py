@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List, Tuple
 class UnitTypes(Enum):
     """
     Enum for the different unit types.
@@ -84,3 +85,12 @@ def unitConversion(fromUnit : str, toUnit : str, value: float):
                 return value * 1.8 + 32
             else:
                 return (value - 32) / 1.8
+
+def largestUnitGreaterOne(unitList : List[str], originalUnit: str, value : float) -> str:
+    filtered = [(x, unitConversion(originalUnit, x, value)) for x in unitList if unitConversion(originalUnit, x, value) > 1.0]
+    r = 0
+    for i in filtered:
+        if i[1] > r[1]:
+            r = i
+    return r[0]
+

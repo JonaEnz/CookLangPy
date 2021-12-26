@@ -1,5 +1,8 @@
 
 
+from unitconversion import largestUnitGreaterOne, unitConversion
+
+
 class Timer():
     """
     A timer is a string of the form "~name{length%unit}".
@@ -14,7 +17,9 @@ class Timer():
         self.name : str = ""
 
     def __str__(self) -> str:
-        return "(Timer {1}: {0} seconds".format(self.length, self.name) #TODO: Unit conversion
+        unit = largestUnitGreaterOne(["SECOND","MINUTE", "HOUR"], "SECOND", float(self.length))
+        val = unitConversion("SECOND", unit, float(self.length))
+        return "(Timer {0}: {1} {2}".format(self.name, val, unit)
 
     def fileOut(self) -> str:
         return r"~" + self.name + r"{" + str(self.length) + r"%seconds}"
