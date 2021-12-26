@@ -3,15 +3,18 @@ from typing import List
 
 from ingredient import Ingredient
 from cookware import Cookware
+from timer import Timer
 
 replaceSpecialReg = re.compile(r"(([#@])(?:[^#@\n{}]+{\S*}|\w+))")
-stepOutReg = re.compile(r"(\$[CI])(\d+)")
+stepOutReg = re.compile(r"(\$[CIT])(\d+)")
 blockCommentReg = re.compile(r".*\[-(.*)-\]")
+timerReg = re.compile(r"~(.*){(\d+)%(hour|minute|second)s?}")
 
 class Step():
     def __init__(self) -> None:
         self.ingredients : List[Ingredient] = []
         self.cookware : List[Cookware] = []
+        self.timer : List[Timer] = []
         self.__text : str = ""
         self.comment : str = ""
 
@@ -35,6 +38,11 @@ class Step():
             elif match[1] == "@":
                 self.ingredients.append(Ingredient.parse(match[0])[0])
                 text = replaceSpecialReg.sub(r"$I{0}".format(len(self.ingredients)-1), text, 1)
+        
+        for match in timerReg.findall(text):
+            self.timer.append(Timer(match[0], match[1], match[2]))
+            text = timerReg.sub(r"$T{0}".format(len(self.timer)-1), text, 1)
+
         self.__text = text
     
     def __str__(self) -> str:
@@ -44,6 +52,8 @@ class Step():
                 out= stepOutReg.sub(str(self.cookware[int(match[1])]), out, 1)
             elif match[0] == "$I":
                 out = stepOutReg.sub(str(self.ingredients[int(match[1])]), out, 1)
+            elif match[0] == "$T":
+                out = stepOutReg.sub(str(self.timer[int(match[1])]), out, 1)
         return out
 
     def fileOut(self) -> str:
@@ -53,4 +63,6 @@ class Step():
                 out= stepOutReg.sub((self.cookware[int(match[1])].fileOut()), out, 1)
             elif match[0] == "$I":
                 out = stepOutReg.sub((self.ingredients[int(match[1])].fileOut()), out, 1)
+            elif match[0] == "$T":
+                out = stepOutReg.sub((self.timer[int(match[1])].fileOut()), out, 1)
         return out

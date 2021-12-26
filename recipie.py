@@ -9,7 +9,7 @@ metadataReg = re.compile(r">> (.+): (.*)")
 class Recipe():
     def __init__(self) -> None:
         self.__steps : List[Step] = []
-        self.metadata : dict = {}
+        self.__metadata : dict = {}
 
     @property
     def ingredients(self) -> List[Ingredient]:
@@ -30,6 +30,28 @@ class Recipe():
                 if cookware.name not in cw:
                     cw[cookware.name] = cookware
         return list(cw.values())
+
+    def get_metadata(self, key:str) -> dict:
+        return self.__metadata[key] if key in self.__metadata else None
+
+    def set_metadata(self, key:str, value:str) -> None:
+        self.__metadata[key] = value
+
+    @property
+    def source(self) -> str:
+        return self.get_metadata("source")
+    
+    @source.setter
+    def source(self, source:str) -> None:
+        self.set_metadata("source", source)
+    
+    @property
+    def servings(self) -> int:
+        return self.get_metadata("servings") if self.get_metadata("servings") else 1
+    
+    @servings.setter
+    def servings(self, servings:int) -> None:
+        self.metadata["servings"] = servings
 
     def parse(input:str) -> None:
         r = Recipe()
