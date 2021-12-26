@@ -8,13 +8,13 @@ from timer import Timer
 replaceSpecialReg = re.compile(r"(([#@])(?:[^#@\n{}]+{\S*}|\w+))")
 stepOutReg = re.compile(r"(\$[CIT])(\d+)")
 blockCommentReg = re.compile(r".*\[-(.*)-\]")
-timerReg = re.compile(r"~(.*){(\d+)%(hour|minute|second)s?}")
+timerReg = re.compile(r"(~.*{\d+%(?:hour|minute|second)s?})")
 
 class Step():
     def __init__(self) -> None:
         self.ingredients : List[Ingredient] = []
         self.cookware : List[Cookware] = []
-        self.timer : List[Timer] = []
+        self.timers : List[Timer] = []
         self.__text : str = ""
         self.comment : str = ""
 
@@ -40,8 +40,8 @@ class Step():
                 text = replaceSpecialReg.sub(r"$I{0}".format(len(self.ingredients)-1), text, 1)
         
         for match in timerReg.findall(text):
-            self.timer.append(Timer(match[0], match[1], match[2]))
-            text = timerReg.sub(r"$T{0}".format(len(self.timer)-1), text, 1)
+            self.timers.append(Timer.parse(match[0])[0])
+            text = timerReg.sub(r"$T{0}".format(len(self.timers)-1), text, 1)
 
         self.__text = text
     

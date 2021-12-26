@@ -1,7 +1,9 @@
-
+import re
+from typing import List
 
 from unitconversion import largestUnitGreaterOne, unitConversion
 
+timerReg = re.compile(r"~(.*){(\d+)%(hour|minute|second)s?}")
 
 class Timer():
     """
@@ -15,6 +17,14 @@ class Timer():
         """
         self.length : int = 0
         self.name : str = ""
+
+    def parse(self, input:str) -> List['Timer']:
+        timers = []
+        for match in timerReg.findall(input):
+            t = Timer()
+            t.length = unitConversion(match[2], "SECOND", float(match[1]))
+            t.name = match[0]
+            timers.append(t)
 
     def __str__(self) -> str:
         unit = largestUnitGreaterOne(["SECOND","MINUTE", "HOUR"], "SECOND", float(self.length))
