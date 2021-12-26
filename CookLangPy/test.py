@@ -1,6 +1,3 @@
-from typing import List
-import re
-
 from recipie import Recipe
 
 a = Recipe.parse("""Then add @salt and @ground black pepper{} to taste.
