@@ -51,33 +51,33 @@ TimeUnits = {
     "HR" : 3600.0,
 }
 
-def getUnitType(unit: str):
-    if unit.upper() in VolumeUnits:
+def getUnitType(unit1: str, unit2: str) -> UnitTypes:
+    if unit1.upper() in VolumeUnits and unit2.upper() in VolumeUnits:
         return UnitTypes.VOLUME
-    elif unit.upper() in WeightUnits:
+    elif unit1.upper() in WeightUnits and unit2.upper() in WeightUnits:
         return UnitTypes.WEIGHT
-    elif unit.upper() in TemperatureUnits:
+    elif unit1.upper() in TemperatureUnits and unit2.upper() in TemperatureUnits:
         return UnitTypes.TEMPERATURE
-    elif unit.upper() in TimeUnits:
+    elif unit1.upper() in TimeUnits and unit2.upper() in TimeUnits:
         return UnitTypes.TIME
     else:
         return None
 
-def getUnitConversionFactor(unit: str) -> float:
-    if unit.upper() in VolumeUnits:
+def getUnitConversionFactor(unit: str, utype : UnitTypes) -> float:
+    if utype == UnitTypes.VOLUME:
         return VolumeUnits[unit.upper()]
-    elif unit.upper() in WeightUnits:
+    elif utype == UnitTypes.WEIGHT:
         return WeightUnits[unit.upper()]
-    elif unit.upper() in TemperatureUnits:
+    elif utype == UnitTypes.TEMPERATURE:
         return TemperatureUnits[unit.upper()]
-    elif unit.upper() in TimeUnits:
+    elif utype == UnitTypes.TIME:
         return TimeUnits[unit.upper()]
     else:
         return 1.0
 
 def unitConversion(fromUnit : str, toUnit : str, value: float):
-    if getUnitType(fromUnit) == getUnitType(toUnit):
-        if(getUnitType(fromUnit) != UnitTypes.TEMPERATURE):
+    if getUnitType(fromUnit, toUnit):
+        if(getUnitType(fromUnit, fromUnit) != UnitTypes.TEMPERATURE):
             return value * (getUnitConversionFactor(fromUnit) / getUnitConversionFactor(toUnit))
         else:
             if (getUnitConversionFactor(fromUnit) == 1.0):
