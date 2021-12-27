@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-recpReg = re.compile(r"@(?:([\w ]+){([\w ]*)(?:%?(\S+))?})|@(\w+)")
+recpReg = re.compile(r"@(?:([\w ]+){([\w \.]*)(?:%(\S+))?})|@(\w+)")
 
 class Ingredient():
     def __init__(self, name:str, amount:str, unit:str):

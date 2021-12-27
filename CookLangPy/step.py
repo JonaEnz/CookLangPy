@@ -1,9 +1,9 @@
 import re
 from typing import List
 
-from ingredient import Ingredient
-from cookware import Cookware
-from timer import Timer
+from CookLangPy.ingredient import Ingredient
+from CookLangPy.cookware import Cookware
+from CookLangPy.timer import Timer
 
 replaceSpecialReg = re.compile(r"(([#@])(?:[^#@\n{}]+{\S*}|\w+))")
 stepOutReg = re.compile(r"(\$[CIT])(\d+)")
@@ -64,5 +64,5 @@ class Step():
             elif match[0] == "$I":
                 out = stepOutReg.sub((self.ingredients[int(match[1])].fileOut()), out, 1)
             elif match[0] == "$T":
-                out = stepOutReg.sub((self.timer[int(match[1])].fileOut()), out, 1)
+                out = stepOutReg.sub((self.timers[int(match[1])].fileOut()), out, 1)
         return out

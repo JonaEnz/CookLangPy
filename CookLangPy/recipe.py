@@ -1,9 +1,9 @@
 import re
 from typing import List
-from ingredient import Ingredient
+from CookLangPy.ingredient import Ingredient
 
-from cookware import Cookware
-from step import Step
+from CookLangPy.cookware import Cookware
+from CookLangPy.step import Step
 
 metadataReg = re.compile(r">> (.+): (.*)")
 class Recipe():
@@ -51,9 +51,9 @@ class Recipe():
     
     @servings.setter
     def servings(self, servings:int) -> None:
-        self.metadata["servings"] = servings
+        self.set_metadata("servings", servings)
 
-    def parse(input:str) -> None:
+    def parse(input:str) -> 'Recipe':
         r = Recipe()
         r.__steps = []
         list(map((lambda x: Step.parse(x)), input.split("\n")))
@@ -65,9 +65,17 @@ class Recipe():
                 r.__steps.append(Step.parse(step))
         return r
 
+    def from_file(filename:str) -> None:
+        with open(filename, "r") as f:
+            return Recipe.parse(f.read())
+    
+    def to_file(self, filename:str) -> None:
+        with open(filename, "w") as f:
+            f.write(self.fileOut())
+
     def __str__(self) -> str:
         return "\n".join(map((lambda x: str(x)), self.__steps))
 
     def fileOut(self) -> str:
-        metadata = "".join(map(lambda x: ">> {0}: {1}\n".format(x[0], x[1]), self.metadata.items()))
+        metadata = "".join(map(lambda x: ">> {0}: {1}\n".format(x[0], x[1]), self.__metadata.items()))
         return metadata + "\n".join(map((lambda x: x.fileOut()), self.__steps))

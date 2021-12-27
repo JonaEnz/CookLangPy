@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-from unitconversion import largestUnitGreaterOne, unitConversion
+from CookLangPy.unitconversion import largestUnitGreaterOne, unitConversion
 
 timerReg = re.compile(r"~(.*){(\d+)%(hour|minute|second)s?}")
 
@@ -30,7 +30,13 @@ class Timer():
     def __str__(self) -> str:
         unit = largestUnitGreaterOne(["SECOND","MINUTE", "HOUR"], "SECOND", float(self.length))
         val = unitConversion("SECOND", unit, float(self.length))
-        return "(Timer {0}: {1} {2}".format(self.name, val, unit)
+        if val > 1.0:
+            unit += "S"
+        return "(Timer {0}: {1} {2}".format(self.name, val, unit.lower())
 
     def fileOut(self) -> str:
-        return r"~" + self.name + r"{" + str(self.length) + r"%seconds}"
+        unit = largestUnitGreaterOne(["SECOND","MINUTE", "HOUR"], "SECOND", float(self.length))
+        val = unitConversion("SECOND", unit, float(self.length))
+        if val > 1.0:
+            unit += "S"
+        return r"~" + self.name + r"{" + str(val) + r"%" + unit.lower() + r"}"

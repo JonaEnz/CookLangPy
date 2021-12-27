@@ -89,9 +89,9 @@ def unitConversion(fromUnit : str, toUnit : str, value: float):
 
 def largestUnitGreaterOne(unitList : List[str], originalUnit: str, value : float) -> str:
     filtered = [(x, unitConversion(originalUnit, x, value)) for x in unitList if unitConversion(originalUnit, x, value) > 1.0]
-    r = 0
-    for i in filtered:
-        if i[1] > r[1]:
-            r = i
-    return r[0]
+    l = min(filtered, key=lambda x: x[1])
+    if len(l) == 0:
+        return originalUnit
+    else:
+        return l[0]
 
