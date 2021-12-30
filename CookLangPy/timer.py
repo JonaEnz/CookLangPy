@@ -3,7 +3,7 @@ from typing import List
 
 from CookLangPy.unitconversion import largestUnitGreaterOne, unitConversion
 
-timerReg = re.compile(r"~(.*){(\d+)%(hour|minute|second)s?}")
+timerReg = re.compile(r"~(.*){(\d+(?:\.\d+)?)%(hour|minute|second)s?}")
 
 class Timer():
     """
@@ -39,4 +39,4 @@ class Timer():
         val = unitConversion("SECOND", unit, float(self.length))
         if val > 1.0:
             unit += "S"
-        return r"~" + self.name + r"{" + str(val) + r"%" + unit.lower() + r"}"
+        return r"~" + self.name + r"{" + str(int(val)) + r"%" + unit.lower() + r"}"

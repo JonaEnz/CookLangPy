@@ -12,6 +12,19 @@ class Recipe():
         self.__metadata : dict = {}
 
     @property
+    def steps(self) -> List[Step]:
+        return self.__steps
+    
+    def add_step_at(self, step : Step, index : int) -> None:
+        self.__steps.insert(index, step)
+    
+    def add_step(self, step : Step) -> None:
+        self.__steps.append(step)
+    
+    def remove_step(self, index : int):
+        self.__steps.pop(index)
+
+    @property
     def ingredients(self) -> List[Ingredient]:
         ingredients = {}
         for step in self.__steps:
@@ -70,7 +83,7 @@ class Recipe():
             return Recipe.parse(f.read())
     
     def to_file(self, filename:str) -> None:
-        with open(filename, "w") as f:
+        with open(filename, "w", encoding="utf-16") as f:
             f.write(self.fileOut())
 
     def __str__(self) -> str:

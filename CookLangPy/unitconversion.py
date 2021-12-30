@@ -50,6 +50,7 @@ TimeUnits = {
     "STUNDE": 3600.0,
     "HOUR" : 3600.0,
     "HR" : 3600.0,
+    "H" : 3600.0,
 }
 
 def getUnitType(unit1: str, unit2: str) -> UnitTypes:
